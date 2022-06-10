@@ -6445,6 +6445,10 @@
                 },
                 {
                     "op": "remove",
+                    "path": "/ContainerEntity/Components/Component_[761745188714332364]/Child Entity Order/2"
+                },
+                {
+                    "op": "remove",
                     "path": "/ContainerEntity/Components/Component_[761745188714332364]/Child Entity Order/1"
                 }
             ]

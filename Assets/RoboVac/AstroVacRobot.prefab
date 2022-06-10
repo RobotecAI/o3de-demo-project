@@ -41,6 +41,7 @@
                 "Id": 761745188714332364,
                 "Child Entity Order": [
                     "Entity_[30055431164411]",
+                    "Entity_[2501335067346]",
                     ""
                 ]
             },
@@ -88,7 +89,7 @@
                     "Id": 4358438849696264694,
                     "Controller": {
                         "Configuration": {
-                            "EditorEntityId": 16579625358662007847
+                            "EditorEntityId": 16036531358645956616
                         }
                     }
                 },
@@ -120,6 +121,87 @@
                             -95.78008270263672
                         ]
                     }
+                }
+            }
+        },
+        "Entity_[2501335067346]": {
+            "Id": "Entity_[2501335067346]",
+            "Name": "Camera",
+            "Components": {
+                "Component_[11374557818891197216]": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 11374557818891197216,
+                    "m_template": {
+                        "$type": "ROS2CameraSensorComponent",
+                        "SensorConfiguration": {
+                            "Publishers": {
+                                "sensor_msgs::msg::Image": {
+                                    "Type": "sensor_msgs::msg::Image",
+                                    "Topic": "camera_image"
+                                }
+                            }
+                        }
+                    }
+                },
+                "Component_[1290755085065405035]": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 1290755085065405035
+                },
+                "Component_[14259783009965999296]": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 14259783009965999296
+                },
+                "Component_[15995412607372017135]": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 15995412607372017135,
+                    "m_template": {
+                        "$type": "ROS2FrameComponent"
+                    }
+                },
+                "Component_[17731666208452738745]": {
+                    "$type": "SelectionComponent",
+                    "Id": 17731666208452738745
+                },
+                "Component_[3326089973728387239]": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 3326089973728387239
+                },
+                "Component_[5252358694860900898]": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 5252358694860900898
+                },
+                "Component_[6305046110293848800]": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 6305046110293848800
+                },
+                "Component_[7457535488280998638]": {
+                    "$type": "EditorLockComponent",
+                    "Id": 7457535488280998638
+                },
+                "Component_[8349813488252792627]": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 8349813488252792627
+                },
+                "Component_[9115937467013271984]": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 9115937467013271984,
+                    "Parent Entity": "Entity_[8859800736551]",
+                    "Transform Data": {
+                        "Translate": [
+                            0.0,
+                            0.0,
+                            0.20000000298023224
+                        ],
+                        "Rotate": [
+                            90.0,
+                            -90.0,
+                            0.0
+                        ]
+                    }
+                },
+                "Component_[9390594370921203376]": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 9390594370921203376
                 }
             }
         },
@@ -4783,9 +4865,9 @@
                         "Compute Mass": false,
                         "Mass": 3.0,
                         "Centre of mass offset": [
-                            6.424532461579702e-9,
-                            -2.240314600499005e-9,
-                            4.244342377557331e-11
+                            2.091176787288873e-9,
+                            3.9075187530102085e-9,
+                            -7.555317482754731e-11
                         ],
                         "Compute inertia": false,
                         "Inertia tensor": {
@@ -5228,6 +5310,7 @@
                     "$type": "EditorEntitySortComponent",
                     "Id": 14081951032431453423,
                     "Child Entity Order": [
+                        "Entity_[2501335067346]",
                         "Instance_[8975764853543]/ContainerEntity",
                         "Entity_[5002252716067]"
                     ]
