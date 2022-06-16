@@ -110,14 +110,14 @@
                     "Parent Entity": "Entity_[30055431164411]",
                     "Transform Data": {
                         "Translate": [
-                            -1.484060287475586,
-                            0.11170625686645508,
-                            0.7430511116981506
+                            -1.4058618545532227,
+                            0.10479402542114258,
+                            1.2001819610595703
                         ],
                         "Rotate": [
-                            0.8662934899330139,
-                            9.706164360046387,
-                            -95.1249771118164
+                            2.812905788421631,
+                            29.03843116760254,
+                            -95.78008270263672
                         ]
                     }
                 }
@@ -166,6 +166,14 @@
                                                     "guid": "{C86377E6-04B6-54CF-9909-B9392E646FA9}",
                                                     "subId": 1000
                                                 }
+                                            },
+                                            "baseColor.useTexture": {
+                                                "$type": "bool",
+                                                "Value": true
+                                            },
+                                            "baseColor.textureBlendMode": {
+                                                "$type": "unsigned int",
+                                                "Value": 3
                                             }
                                         }
                                     }
@@ -899,7 +907,7 @@
                         "MaterialSlots": {
                             "Slots": [
                                 {
-                                    "Name": "Entire object"
+                                    "Name": "Paint - Enamel Glossy (Black)"
                                 }
                             ]
                         },
@@ -2593,14 +2601,7 @@
                 "Component_[202200107630449173]": {
                     "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
                     "Id": 202200107630449173,
-                    "Parent Entity": "Entity_[6506158658343]",
-                    "Transform Data": {
-                        "Translate": [
-                            56.0,
-                            37.874290466308594,
-                            -2.2000176906585693
-                        ]
-                    }
+                    "Parent Entity": "Entity_[6506158658343]"
                 },
                 "Component_[5852860452079171804]": {
                     "$type": "EditorVisibilityComponent",
@@ -3893,7 +3894,7 @@
                         "MaterialSlots": {
                             "Slots": [
                                 {
-                                    "Name": "Entire object"
+                                    "Name": "ABS (White)"
                                 }
                             ]
                         },
@@ -4768,17 +4769,6 @@
             "Id": "Entity_[30055431164411]",
             "Name": "AstroVacRobot",
             "Components": {
-                "Component_[10044771047696910406]": {
-                    "$type": "GenericComponentWrapper",
-                    "Id": 10044771047696910406,
-                    "m_template": {
-                        "$type": "ROS2FrameComponent",
-                        "Namespace Configuration": {
-                            "Namespace Strategy": 1
-                        },
-                        "Frame Name": "base_link"
-                    }
-                },
                 "Component_[12335778149585122117]": {
                     "$type": "EditorEntityIconComponent",
                     "Id": 12335778149585122117
@@ -4788,8 +4778,10 @@
                     "Id": 13195787262642532680,
                     "Configuration": {
                         "entityId": "",
+                        "Linear damping": 0.009999999776482582,
+                        "Angular damping": 0.10000000149011612,
                         "Compute Mass": false,
-                        "Mass": 5.0,
+                        "Mass": 3.0,
                         "Centre of mass offset": [
                             6.424532461579702e-9,
                             -2.240314600499005e-9,
@@ -4800,7 +4792,7 @@
                             "roll": 0.0,
                             "pitch": 0.0,
                             "yaw": 0.0,
-                            "scale": 0.0010974486358463764
+                            "scale": 0.5
                         }
                     }
                 },
@@ -4840,22 +4832,15 @@
                         "Entity_[8859800736551]"
                     ]
                 },
-                "Component_[15975670446214446929]": {
+                "Component_[15910097906063283013]": {
                     "$type": "GenericComponentWrapper",
-                    "Id": 15975670446214446929,
+                    "Id": 15910097906063283013,
                     "m_template": {
-                        "$type": "ROS2RobotControlComponent",
-                        "ControlConfiguration": {
-                            "Topic": "cmd_vel",
-                            "BroadcastBusMode": false,
-                            "RobotConfiguration": {
-                                "Body": "Entity_[30055431164411]",
-                                "Front left wheel": "",
-                                "Front right wheel": "",
-                                "Rear left wheel": "",
-                                "Rear right wheel": ""
-                            }
-                        }
+                        "$type": "ROS2FrameComponent",
+                        "Namespace Configuration": {
+                            "Namespace Strategy": 1
+                        },
+                        "Frame Name": "base_link"
                     }
                 },
                 "Component_[16572099067667838198]": {
@@ -4906,6 +4891,24 @@
                 "Component_[5957548067248555519]": {
                     "$type": "EditorPendingCompositionComponent",
                     "Id": 5957548067248555519
+                },
+                "Component_[7715341178742189308]": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 7715341178742189308,
+                    "m_template": {
+                        "$type": "ROS2RobotControlComponent",
+                        "ControlConfiguration": {
+                            "Topic": "/cmd_vel",
+                            "BroadcastBusMode": false,
+                            "RobotConfiguration": {
+                                "Body": "Entity_[30055431164411]",
+                                "Front left wheel": "",
+                                "Front right wheel": "",
+                                "Rear left wheel": "",
+                                "Rear right wheel": ""
+                            }
+                        }
+                    }
                 },
                 "Component_[8050084937550776360]": {
                     "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
@@ -5045,6 +5048,7 @@
                     "m_template": {
                         "$type": "ROS2LidarSensorComponent",
                         "SensorConfiguration": {
+                            "Visualise": false,
                             "Publishers": {
                                 "sensor_msgs::msg::PointCloud2": {
                                     "Type": "sensor_msgs::msg::PointCloud2",
@@ -5280,7 +5284,7 @@
                 {
                     "op": "replace",
                     "path": "/ContainerEntity/Components/Component_[6700600896017100313]/Transform Data/Translate/2",
-                    "value": 0.08034273982048035
+                    "value": 0.04095920920372009
                 },
                 {
                     "op": "replace",
