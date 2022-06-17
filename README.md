@@ -37,6 +37,10 @@ $ cd $DEMO_BASE
 
 ~/github$ cd o3de
 
+~/github/o3de$ git checkout 89ab3eae4
+
+~/github/o3de$ git apply CascadePassFix.patch # attached to the issue 
+
 ~/github/o3de$ git lfs install
 
 ~/github/o3de$ git lfs pull
@@ -53,7 +57,7 @@ $ cd $DEMO_BASE
 
 $ cd $DEMO_BASE
 
-~/github$ git clone https://github.com/RobotecAI/o3de-ros2-gem.git
+~/github$ git clone -b feature/ros2-camera-sensor https://github.com/RobotecAI/o3de-ros2-gem.git
 
 ~/github$ $DEMO_BASE/o3de/scripts/o3de.sh register --gem-path $DEMO_BASE/o3de-ros2-gem
 
@@ -67,7 +71,7 @@ $ cd $DEMO_BASE
 
 $ cd $DEMO_BASE
 
-~/github$ git clone https://github.com/aws-lumberyard/loft-arch-vis-sample.git
+~/github$ git clone -b scene_fixes https://github.com/aws-lumberyard/loft-arch-vis-sample.git
 
 ~/github$ cd loft-arch-vis-sample
 
