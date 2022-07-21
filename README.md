@@ -13,7 +13,7 @@ Refer to the [O3DE System Requirements](https://www.o3de.org/docs/welcome-guide/
 This project has the following dependencies:
 
 - [O3DE](https://github.com/o3de/o3de)
-  -  Should work with `develop` branch and newest releases, but the project was tested with commit `#381a6e0f`.
+  -  Should work with `develop` branch and newest releases, but the project was tested with commit `#d6f5abb9`.
 - [ROS2 Gem](https://github.com/RobotecAI/o3de-ros2-gem)
   - `develop` branch (the default) should work. The project was tested with version tag `0.3`.
   - ROS 2 (Galactic) itself is also required, see [Gem Requirements](https://github.com/RobotecAI/o3de-ros2-gem#requirements)  
@@ -70,8 +70,9 @@ $ cd $DEMO_BASE
 ~/$ o3de/scripts/o3de.sh register -pp $DEMO_BASE/o3de-demo-project
 ~/$ cd o3de-demo-project
 ~/o3de-demo-project$ cmake -B build/linux -G "Ninja Multi-Config" -DLY_UNITY_BUILD=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DLY_PARALLEL_LINK_JOBS=16 -DLY_STRIP_DEBUG_SYMBOLS=OFF
-~/o3de-demo-project$ cmake --build build/linux --config profile --target ROS2-Gem-Demo Editor AssetProcessor
+~/o3de-demo-project$ cmake --build build/linux --config profile --target ROS2-Gem-Demo Editor AssetProcessor -j <number of parallel build tasks>
 ```
+The `number of parallel build tasks` is recommended to match the number of cores available on the Linux host machine.
 
 ### 5. Launch Editor
 
