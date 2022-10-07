@@ -21,6 +21,8 @@ This project has the following dependencies:
   - ROS 2 (Galactic or Humble) itself is also required, see [Gem Requirements](https://github.com/RobotecAI/o3de-ros2-gem#requirements)  
 - [Loft Scene Sample](https://github.com/aws-lumberyard/loft-arch-vis-sample)
   - `development` branch (the default) should work.
+- [ROS Gem Demo Project](https://github.com/RobotecAI/o3de-demo-project)
+  - `main` branch (the default) should work.
 
 ## Setup Instructions
 
@@ -29,8 +31,8 @@ The following steps will assume the following
 - The instructions will be based off of a common base folder: $DEMO_BASE. For the steps below, we will use DEMO_BASE of ~/ for simplicty. 
 - This current project has been fetched to $DEMO_BASE
 - You have [ROS2 Galactic](https://docs.ros.org/en/galactic/Installation/Ubuntu-Install-Debians.html) installed and sourced 
-  - for debian package Galactic installation, in your bash console, run `source /opt/ros/<distro>/setup.bash`
-  - you could also add this line to your `.profile`
+  - for debian package Galactic installation, in your bash console, run `source /opt/ros/galactic/setup.bash`
+  - you could also add this line to your `.profile` or `.bashrc`
   - check if ROS 2 is sourced in your current console with `echo $ROS_DISTRO`. You should see `galactic`.
 
 ### 1. Clone O3DE (or install) and register the engine
@@ -41,6 +43,7 @@ The following steps will assume the following
 ~$ cd o3de
 ~/o3de$ git lfs install
 ~/o3de$ git lfs pull
+~/o3de$ git checkout 381a6e0f
 ~/o3de$ python/get_python.sh
 ~/o3de$ scripts/o3de.sh register --this-engine
 ```
@@ -49,8 +52,10 @@ The following steps will assume the following
 
 ```
 ~$ cd $DEMO_BASE
-~$ git clone https://github.com/RobotecAI/o3de-ros2-gem.git --branch 0.3
-~$ $DEMO_BASE/o3de/scripts/o3de.sh register --gem-path $DEMO_BASE/o3de-ros2-gem
+~$ git clone https://github.com/RobotecAI/o3de-ros2-gem.git
+~$ cd o3de-ros2-gem
+~/o3de-ros2-gem$ git checkout 0.3
+~/o3de-ros2-gem$ $DEMO_BASE/o3de/scripts/o3de.sh register --gem-path $DEMO_BASE/o3de-ros2-gem
 ```
 
 ### 3. Clone and register the Loft Scene project locally
@@ -94,10 +99,8 @@ We can run ROS2 navigation stack with our simulation scene and robot. When we ru
 These packages are required to run ROS 2 navigation stack for our robot. For ROS 2 Humble, replace `galactic` with `humble`.
 
 ```
-sudo apt install ros-galactic-slam-toolbox
-sudo apt install ros-galactic-navigation2
-sudo apt install ros-galactic-nav2-bringup
-sudo apt install ros-galactic-pointcloud-to-laserscan
+source /opt/ros/galactic/setup.bash
+sudo apt install -y ros-$ROS_DISTRO-slam-toolbox ros-$ROS_DISTRO-navigation2 ros-$ROS_DISTRO-nav2-bringup ros-$ROS_DISTRO-pointcloud-to-laserscan
 ```
 
 ### 2. Run the simulation
