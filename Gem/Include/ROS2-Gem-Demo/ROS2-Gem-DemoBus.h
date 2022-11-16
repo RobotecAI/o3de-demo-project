@@ -17,7 +17,6 @@ namespace ROS2_Gem_Demo
     public:
         AZ_RTTI(ROS2_Gem_DemoRequests, "{16673c77-215c-41c6-8bbf-6cd2412568e9}");
         virtual ~ROS2_Gem_DemoRequests() = default;
-        // Put your public methods here
     };
 
     class ROS2_Gem_DemoBusTraits
