@@ -25,7 +25,8 @@ include(${pal_dir}/PAL_${PAL_PLATFORM_NAME_LOWERCASE}.cmake)
 
 # Now that we have loaded our project traits for this platform, see if this project is even supported on this platform.
 # If its not supported we just return after including the unsupported.
-if(NOT PAL_TRAIT_ROS2-GEM-DEMO_SUPPORTED)
+if(NOT PAL_TRAIT_ROBOT_VACUUM_SAMPLE_SUPPORTED)
+    message(FATAL_ERROR "The Robot Vacuum Sample application is not supported on this platform")
     return()
 endif()
 
