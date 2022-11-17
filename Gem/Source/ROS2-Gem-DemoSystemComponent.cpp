@@ -24,7 +24,7 @@ namespace RobotVacuumSample
 
             if (AZ::EditContext* ec = serialize->GetEditContext())
             {
-                ec->Class<RobotVacuumSampleSystemComponent>("RobotVacuumSample", "[Description of functionality provided by this System Component]")
+                ec->Class<RobotVacuumSampleSystemComponent>("RobotVacuumSample", "The base Robot Vacuum Sample component.")
                     ->ClassElement(AZ::Edit::ClassElements::EditorData, "")
                         ->Attribute(AZ::Edit::Attributes::AppearsInAddComponentMenu, AZ_CRC("System"))
                         ->Attribute(AZ::Edit::Attributes::AutoExpand, true)
