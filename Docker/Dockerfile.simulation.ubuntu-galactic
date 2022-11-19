@@ -4,12 +4,22 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 #
 
-FROM ros:galactic-ros-base-focal
+# Collect the arguments for the base ros image
+ARG ROS_VERSION=humble
+ARG UBUNTU_VERSION=jammy
+
+FROM ros:${ROS_VERSION}-ros-base-${UBUNTU_VERSION}
+
+# Recollect the arguments for the rest of the setup
+
+ARG ROS_VERSION
+ARG UBUNTU_VERSION
 
 ARG o3de_branch=development
 ARG ros2_gem_branch=development
 ARG loft_gem_branch=main
 ARG o3de_demo_branch=main
+
 
 ENV WORKSPACE=/data/workspace
 
@@ -20,19 +30,22 @@ ENV O3DE_DEMO_REPO=https://github.com/RobotecAI/o3de-demo-project.git
 
 WORKDIR $WORKSPACE
 
-COPY LaunchSimulation.bash.ubuntu-galactic /data/workspace/LaunchSimulation.bash
-COPY cleanup.bash /data/workspace/cleanup.bash
 
 RUN apt-get update && apt-get upgrade -y
 
 # Add additional package repositories needed for packages
 RUN apt-get install -y --no-install-recommends gpg wget curl
 
-# Configure the installation of the minimal version of cmake (3.24) from kitware's apt repo since the default cmake version of ubuntu focal does not meet it
-RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
-    echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null
 
-RUN apt-get update
+# For ubuntu 20.04 (focal) then default version of cmake is not supported. Update and get version 3.24.1 from kitware
+RUN if [ "${UBUNTU_VERSION}" = "focal" ]; then \
+      wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | \
+        gpg --dearmor - | \
+        tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
+      && echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | \
+        tee /etc/apt/sources.list.d/kitware.list >/dev/null \
+      && apt-get update; \
+    fi
 
 #
 # Install packages needed for cloning and building from the source repos
@@ -41,9 +54,9 @@ RUN apt-get update
 # Install the git and build tools
 RUN apt-get install -y --no-install-recommends git \
                        git-lfs \
-                       cmake=3.24.1-0kitware1ubuntu20.04.1 \
                        clang-12 \
                        ninja-build \
+                       cmake \
                        libglu1-mesa-dev \
                        libxcb-xinerama0 \
                        libxcb-xinput0 \
@@ -63,18 +76,20 @@ RUN apt-get install -y --no-install-recommends git \
                        libxcb-render-util0 \
                        libxcb-randr0 \
                        libnvidia-gl-470 \
-                       ufw
+                       ufw \
+                       ros-${ROS_VERSION}-slam-toolbox \
+                       ros-${ROS_VERSION}-navigation2 \
+                       ros-${ROS_VERSION}-nav2-bringup \
+                       ros-${ROS_VERSION}-pointcloud-to-laserscan \
+                       ros-${ROS_VERSION}-gazebo-msgs \
+                       ros-${ROS_VERSION}-ackermann-msgs \
+                       ros-${ROS_VERSION}-control-toolbox
 
-# Add additional ROS2/Galactic packages
-RUN /bin/bash -c 'source /opt/ros/galactic/setup.bash && \
-                  apt install -y ros-${ROS_DISTRO}-slam-toolbox \
-                                 ros-${ROS_DISTRO}-navigation2 \
-                                 ros-${ROS_DISTRO}-nav2-bringup \
-                                 ros-${ROS_DISTRO}-pointcloud-to-laserscan \
-                                 ros-${ROS_DISTRO}-gazebo-msgs \
-                                 ros-${ROS_DISTRO}-ackermann-msgs \
-                                 ros-${ROS_DISTRO}-control-toolbox'
 
+
+COPY cleanup.bash /data/workspace/cleanup.bash
+
+RUN $WORKSPACE/cleanup.bash
 
 # Clone O3DE repos, register, build, and cleanup in the same layer to reduce the size
 RUN cd $WORKSPACE && \
@@ -97,10 +112,12 @@ RUN cd $WORKSPACE && \
     git -C $WORKSPACE/o3de-demo-project lfs install && \
     git -C $WORKSPACE/o3de-demo-project lfs pull && \
     $WORKSPACE/o3de/scripts/o3de.sh register -pp $WORKSPACE/o3de-demo-project/  && \
-    /bin/bash -c 'source /opt/ros/galactic/setup.bash && \
-                  cmake -B $WORKSPACE/o3de-demo-project/build/linux -S $WORKSPACE/o3de-demo-project -G "Ninja Multi-Config" -DLY_STRIP_DEBUG_SYMBOLS=TRUE -DLY_DISABLE_TEST_MODULES=ON && \
-                  cmake --build $WORKSPACE/o3de-demo-project/build/linux --config profile --target AssetProcessorBatch ROS2-Gem-Demo.GameLauncher ROS2-Gem-Demo.Assets && \
-                  $WORKSPACE/cleanup.bash'
+    . /opt/ros/${ROS_VERSION}/setup.sh && \
+    cmake -B $WORKSPACE/o3de-demo-project/build/linux -S $WORKSPACE/o3de-demo-project -G "Ninja Multi-Config" -DLY_STRIP_DEBUG_SYMBOLS=TRUE -DLY_DISABLE_TEST_MODULES=ON && \
+    cmake --build $WORKSPACE/o3de-demo-project/build/linux --config profile --target AssetProcessorBatch ROS2-Gem-Demo.GameLauncher ROS2-Gem-Demo.Assets -j 20 && \
+    $WORKSPACE/cleanup.bash
+
+COPY LaunchSimulation.bash /data/workspace/LaunchSimulation.bash
 
  
 ENV NVIDIA_VISIBLE_DEVICES all
