@@ -10,32 +10,31 @@ ARG UBUNTU_VERSION=jammy
 
 FROM ros:${ROS_VERSION}-ros-base-${UBUNTU_VERSION}
 
-ARG IMAGE_TYPE=simulation
-
-
 ARG ROS_VERSION
 ARG UBUNTU_VERSION
 
-ARG O3DE_BRANCH=development
-ARG ROS2_GEM_BRANCH=development
-ARG LOFT_GEM_BRANCH=main
-ARG ROBOT_VAC_SAMPLE_BRANCH=main
+
+# Argument to determining the image type ('simulation' or 'navstack')
+ARG IMAGE_TYPE=simulation  # Default to 'simulation'
+
+
+# Arguments for the source repos needed for the robot vacuum sample docker
 
 ARG O3DE_REPO=https://github.com/o3de/o3de.git
+ARG O3DE_BRANCH=development
 
 ARG ROS2_GEM_REPO=https://github.com/RobotecAI/o3de-ros2-gem.git
+ARG ROS2_GEM_BRANCH=development
 
 ARG LOFT_GEM_REPO=https://github.com/o3de/loft-arch-vis-sample.git
+ARG LOFT_GEM_BRANCH=main
 
 ARG ROBOT_VAC_SAMPLE_REPO=https://github.com/RobotecAI/o3de-demo-project.git
-
-
+ARG ROBOT_VAC_SAMPLE_BRANCH=main
 
 ENV WORKSPACE=/data/workspace
 
-
 WORKDIR $WORKSPACE
-
 
 RUN apt-get update && apt-get upgrade -y
 
@@ -93,10 +92,7 @@ RUN apt-get install -y --no-install-recommends git \
                        ros-${ROS_VERSION}-control-toolbox
 
 
-
 COPY cleanup.bash /data/workspace/cleanup.bash
-
-RUN $WORKSPACE/cleanup.bash
 
 # Clone O3DE repos, register, build, and cleanup in the same layer to reduce the size
 RUN if [ "${IMAGE_TYPE}" = "simulation" ]; then \
@@ -124,16 +120,20 @@ RUN if [ "${IMAGE_TYPE}" = "simulation" ]; then \
         cmake -B $WORKSPACE/o3de-demo-project/build/linux -S $WORKSPACE/o3de-demo-project -G "Ninja Multi-Config" -DLY_STRIP_DEBUG_SYMBOLS=TRUE -DLY_DISABLE_TEST_MODULES=ON && \
         cmake --build $WORKSPACE/o3de-demo-project/build/linux --config profile --target AssetProcessorBatch ROS2-Gem-Demo.GameLauncher ROS2-Gem-Demo.Assets -j 20 && \
         $WORKSPACE/cleanup.bash; \
-    else \
+    elif [  "${IMAGE_TYPE}" = "navstack" ]; then \
+        apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-desktop && \
         cd $WORKSPACE && \
         git clone --recursive $ROBOT_VAC_SAMPLE_REPO && \
         git -C $WORKSPACE/o3de-demo-project checkout $ROBOT_VAC_SAMPLE_BRANCH; \
+    else \
+        echo "Unsupported IMAGE_TYPE: ${IMAGE_TYPE}" && exit 1; \
     fi
 
 COPY LaunchSimulation.bash /data/workspace/LaunchSimulation.bash
 COPY LaunchNavStack.bash /data/workspace/LaunchNavStack.bash
 
- 
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp 
+
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES all
  
