@@ -9,4 +9,4 @@
 
 # helper script to rebuild project
 
-cmake --build build/linux --config profile --target ROS2-Gem-Demo Editor AssetProcessor -j12
+cmake --build build/linux --config profile --target RobotVacuumSample Editor AssetProcessor -j12
