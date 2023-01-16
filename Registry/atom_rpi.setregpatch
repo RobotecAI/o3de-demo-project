@@ -1,3 +1,0 @@
-[
-    { "op": "replace", "path": "/O3DE/Atom/RPI/Initialization/ImageSystemDescriptor/AssetStreamingImagePoolSize", "value": 3221225472 }
-]
